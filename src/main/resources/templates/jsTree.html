@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>Simple jsTree</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		$.ajax({
+			async : true,
+			type : "POST",
+			url : "http://localhost:8080/assets",
+			dataType : "json",
+			success : function(json) {
+				createJSTree(json);
+			},
+
+			error : function(xhr, ajaxOptions, thrownError) {
+				alert("xhr.status: " + xhr.status);
+				alert("thrownError: " + thrownError);
+			}
+		});
+	});
+
+	function createJSTree(jsondata) {
+		$('#jsTree').jstree(
+				{
+					'core' : {
+						'check_callback': true, /* determines what happens when a user tries to modify the structure of the tree If left as false all operations like create, rename, delete, move or copy are prevented */
+						'data' : jsondata
+					},
+					"plugins" : [ "search", "contextmenu" ],
+					"search" : {
+						"case_sensitive" : false,
+						"show_only_matches" : true
+					},
+					"contextmenu" : {
+						"items" : function($node) {
+
+							var nodeId = $('#jsTree').jstree().get_selected(
+									"id")[0].id;
+							var nodeType = $('#jsTree').jstree().get_selected(
+									"id")[0].type;
+							/* alert("folder: " + nodeType) */
+
+							var tree = $("#jsTree").jstree(true);
+							if ($node.type === 'file') {
+								/* alert("file: " + $node); */
+								return getFileContextMenu($node, tree);
+							} else {
+
+								return getFolderContextMenu($node, tree);
+							}
+						}
+					}
+				}).bind("select_node.jstree", function(evt, data) {
+
+			var i, j, k = [], r = [], m=[], ids = [];
+			for (i = 0, j = data.selected.length; i < j; i++) {
+				//alert("data.selected[i]: " + data.selected[i]);
+				r.push(data.instance.get_node(data.selected[i]).text);
+				k.push(data.instance.get_node(data.selected[i]).id)
+				m.push(data.instance.get_node(data.selected[i]).parent)
+
+			}
+			//alert('Selected: ' + r.join(', '));
+			var x = document.getElementById("selectedNodeText");
+			x.innerHTML = r.join(', ');
+			var y = document.getElementById("selectedNodeId");
+			y.innerHTML = k.join(', ');
+			//alert('Selected: ' + m.join(', '));
+			var z = document.getElementById("selectedNodeType");
+			z.innerHTML = m.join(', ');
+		});
+	}
+
+	function getFolderContextMenu($node, tree) {
+		return {
+			"Create" : {
+				"separator_before" : false,
+				"separator_after" : true,
+				"label" : "Create",
+				"action" : false,
+				"submenu" : {
+					"File" : {
+						"seperator_before" : false,
+						"seperator_after" : false,
+						"label" : "File",
+						action : function(obj) {
+							$node = tree.create_node($node, {
+								text : 'New File',
+								icon : 'glyphicon glyphicon-file',
+								a_attr : {
+									type : 'file'
+								}
+							});
+							tree.deselect_all();
+							tree.select_node($node);
+						}
+					},
+					"Folder" : {
+						"seperator_before" : false,
+						"seperator_after" : false,
+						"label" : "Folder",
+						action : function(obj) {
+							$node = tree.create_node($node, {
+								text : 'New Folder',
+								icon : 'glyphicon glyphicon-folder-open',
+								a_attr : {
+									type : 'folder'
+								}
+							});
+							tree.deselect_all();
+							tree.select_node($node);
+						}
+					}
+				}
+			},
+			"Rename" : {
+				"separator_before" : false,
+				"separator_after" : false,
+				"label" : "Rename",
+				"action" : function(obj) {
+					/* alert("In rename"); */
+					tree.edit($node);
+				}
+			},
+			"Remove" : {
+				"separator_before" : false,
+				"separator_after" : false,
+				"label" : "Remove",
+				"action" : function(obj) {
+					tree.delete_node($node);
+				}
+			}
+		};
+	}
+
+	function getFileContextMenu($node, tree) {
+		return {
+			"Rename" : {
+				"separator_before" : false,
+				"separator_after" : false,
+				"label" : "Rename",
+				"action" : function(obj) {
+					tree.edit($node);
+				}
+			},
+			"Remove" : {
+				"separator_before" : false,
+				"separator_after" : false,
+				"label" : "Remove",
+				"action" : function(obj) {
+					tree.delete_node($node);
+				}
+			}
+		};
+	}
+
+	$(document).ready(function() {
+		$("#search").keyup(function() {
+			var searchString = $(this).val();
+			$('#jsTree').jstree('search', searchString);
+		});
+	});
+	$('#jsTree').slimScroll({
+		height : '200px'
+	});
+
+	$("#jsTree").on("select_node.jstree", function(evt, data) {
+		alert(data.node.text);
+	});
+</script>
+</head>
+<body>
+	<div class="container" style="padding: 10px 10px;">
+		<h1>Simple jQuery Jstree Example with href link and Search</h1>
+		<div class="well clearfix">
+			<div class="col-md-4">
+				<!--panel-->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="input-group">
+							<input type="text" class="form-control"
+								placeholder="Search node .." id="search"> <span
+								class="input-group-btn">
+								<button class="btn btn-default" type="button" id="btn-search">Go!</button>
+							</span>
+						</div>
+						<!-- /input-group -->
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-8" id="jsTree"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<!--panel-->
+				<div class="panel panel-default">
+					<div class="panel-heading" id="selectedNodeId">Selected Node Text
+						-</div>
+					<div class="panel-body">
+						<div class="" id="selectedNodeText">Text</div>
+					</div>
+					<div class="panel-heading" id="selectedNodeType">Selected Node Type
+						-</div>
+					<div class="panel-body">
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+	/*   $(document).ready(function(){
+	 $('#jsTree').jstree({
+	 'core' : {
+	 'data' : jsonData
+	 },
+	 "search": {
+	 "case_insensitive": true,
+	 "show_only_matches" : true
+	 },
+	 plugins: ["search"]
+	 }).bind("select_node.jstree", function (e, data) {
+	 var href = data.node.a_attr.href;
+	 var parentId = data.node.a_attr.parent_id;
+	 if(href == '#')
+	 return '';
+	
+	 window.open(href);
+	
+	 });
+	 $('#jsTree').slimScroll({
+	 height: '200px'
+	 });
+	 $('#search').keyup(function(){
+	 $('#jsTree').jstree('search', $(this).val());
+	 }); 
+	
+	 }); */
+</script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+2 <!DOCTYPE html>
+ <html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css">
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js"></script>
+  
+  <title>js-tutorials.com : jsTree Example with href link,Search node and slimScroll</title>
+  <script>
+  var jsonTreeData = [
+	{  
+	   "id":"1",
+	   "name":"Electronics",
+	   "text":"Electronics",
+	   "parent_id":"0",
+	   "children":[  
+		  {  
+			 "id":"2",
+			 "name":"Mobile",
+			 "text":"Mobile",
+			 "parent_id":"1",
+			 "children":[  
+				{  
+				   "id":"7",
+				   "name":"Samsung",
+				   "text":"Samsung",
+				   "parent_id":"2",
+				   "children":[  
+
+				   ],
+				   "data":{  
+
+				   },
+				   "a_attr":{  
+					  "href":"http://js-tutorials.com"
+				   }
+				},
+				{  
+				   "id":"8",
+				   "name":"Apple",
+				   "text":"Apple",
+				   "parent_id":"2",
+				   "children":[  
+
+				   ],
+				   "data":{  
+
+				   },
+				   "a_attr":{  
+					  "href":"http://js-tutorials.com"
+				   }
+				}
+			 ],
+			 "data":{  
+
+			 },
+			 "a_attr":{  
+				"href":"http://js-tutorials.com"
+			 }
+		  },
+		  {  
+			 "id":"3",
+			 "name":"Laptop",
+			 "text":"Laptop",
+			 "parent_id":"1",
+			 "state" : {
+			   selected  : true,
+			   opened : true
+			 },
+			 "children":[  
+				{  
+				   "id":"4",
+				   "name":"Keyboard",
+				   "text":"Keyboard",
+				   "parent_id":"3",
+				   "children":[  
+
+				   ],
+				   "data":{  
+
+				   },
+				   "a_attr":{  
+					  "href":"http://js-tutorials.com"
+				   }
+				},
+				{  
+				   "id":"5",
+				   "name":"Computer Peripherals",
+				   "text":"Computer Peripherals",
+				   "parent_id":"3",
+				   "state" : {
+					   selected  : true,
+					   opened : true
+					},
+				   "children":[  
+					  {  
+						 "id":"6",
+						 "name":"Printers",
+						 "text":"Printers",
+						 "parent_id":"5",
+						 "children":[  
+
+						 ],
+						 "data":{  
+
+						 },
+						 "a_attr":{  
+							"href":"http://js-tutorials.com"
+						 }
+					  },
+					  {  
+						 "id":"10",
+						 "name":"Monitors",
+						 "text":"Monitors",
+						 "parent_id":"5",
+						 "children":[  
+
+						 ],
+						 "data":{  
+
+						 },
+						 "a_attr":{  
+							"href":"http://js-tutorials.com"
+						 }
+					  }
+				   ],
+				   "data":{  
+
+				   },
+				   "a_attr":{  
+					  "href":"http://js-tutorials.com"
+				   }
+				},
+				{  
+				   "id":"11",
+				   "name":"Dell",
+				   "text":"Dell",
+				   "parent_id":"3",
+				   "children":[  
+
+				   ],
+				   "data":{  
+
+				   },
+				   "a_attr":{  
+					  "href":"http://js-tutorials.com"
+				   }
+				}
+			 ],
+			 "data":{  
+
+			 },
+			 "a_attr":{  
+				"href":"http://js-tutorials.com"
+			 }
+		  }
+	   ],
+	   "data":{  
+
+	   },
+	   "a_attr":{  
+		  "href":"http://js-tutorials.com"
+	   }
+	}
+  ];
+  </script>
+</head>
+<body>
+  <div class="container" style="padding:10px 10px;">
+	<h1>Simple jQuery Jstree Example with href link and Search </h1>
+	<div class="well clearfix">
+		<div class="col-md-4">
+			<!--panel-->
+			<div class="panel panel-default">
+			 <div class="panel-heading">
+				<div class="input-group">
+				  <input type="text" class="form-control" placeholder="Search node .." id="search">
+				  <span class="input-group-btn">
+					<button class="btn btn-default" type="button" id="btn-search">Go!</button>
+				  </span>
+				</div><!-- /input-group -->
+			 </div>
+			 <div class="panel-body">
+				<div class="row">
+					<div class="col-md-8" id="treeview_json"></div>
+				</div>
+			 </div>
+			</div>
+		</div>
+		<div class="col-md-8">
+			<!--panel-->
+			<div class="panel panel-default">
+			 <div class="panel-heading">
+			 Select Node - 
+			 </div>
+			 <div class="panel-body">
+				<div class="">
+					Content
+				</div>
+			 </div>
+			</div>
+		</div>
+	</div>
+  </div>
+</body>
+</html>
+<script type="text/javascript">
+  $(document).ready(function(){
+	$('#treeview_json').jstree({
+		'core' : {
+            'data' : jsonTreeData
+        },
+		"search": {
+			"case_insensitive": true,
+			"show_only_matches" : true
+		},
+		plugins: ["search"]
+	}).bind("select_node.jstree", function (e, data) {
+		 var href = data.node.a_attr.href;
+		 var parentId = data.node.a_attr.parent_id;
+		 if(href == '#')
+		 return '';
+		 
+		 window.open(href);
+		 
+	});
+	$('#treeview_json').slimScroll({
+		height: '200px'
+	});
+	$('#search').keyup(function(){
+		$('#treeview_json').jstree('search', $(this).val());
+	});
+	
+  });
+</script>
