@@ -32,6 +32,20 @@
 			}
 		});
 	});
+	
+	/* $('#jsTree').bind("select_node.jstree", function (e, data) {
+		alert("select_node.jstree");
+	    var href = data.node.a_attr.href;
+	    window.location.href = href;
+	}); */
+	
+	$("#jsTree").on("click", ".jstree-anchor", function(evt)
+			{
+			alert("select_node.jstree");
+			var link = $(evt.target).attr("href");
+			window.open(link, '_blank');
+			});
+	
 
 	function createJSTree(jsondata) {
 		$('#jsTree').jstree(
@@ -132,8 +146,10 @@
 				"separator_after" : false,
 				"label" : "Rename",
 				"action" : function(obj) {
-					/* alert("In rename"); */
-					tree.edit($node);
+					//alert("In rename");
+					//var link = $(evt.target).attr("http://google.com");
+					window.open("http://localhost:8080/assets", '_blank');
+					//tree.edit($node);
 				}
 			},
 			"Remove" : {

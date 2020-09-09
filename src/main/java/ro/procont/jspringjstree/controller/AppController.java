@@ -13,8 +13,8 @@ import ro.procont.jspringjstree.model.Asset;
 import ro.procont.jspringjstree.model.Product;
 import ro.procont.jspringjstree.service.AssetService;
 import ro.procont.jspringjstree.service.ProductService;
-import ro.procont.jspringjstree.util.SearchTree;
-import ro.procont.jspringjstree.util.SearchTreeNode;
+//import ro.procont.jspringjstree.util.SearchTree;
+//import ro.procont.jspringjstree.util.SearchTreeNode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,11 +42,11 @@ public class AppController {
     }
     
     
-    @RequestMapping("/jstree1")
-    public String getJsTree1(ModelMap model) {
-        model.addAttribute("message", "Hello world from controller!");
-        return "jsTree1";
-    }
+//    @RequestMapping("/jstree1")
+//    public String getJsTree1(ModelMap model) {
+//        model.addAttribute("message", "Hello world from controller!");
+//        return "jsTree1";
+//    }
  
     
     

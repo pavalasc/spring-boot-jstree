@@ -37,6 +37,7 @@
 		$('#jsTree').jstree(
 				{
 					'core' : {
+						'check_callback': true, /* determines what happens when a user tries to modify the structure of the tree If left as false all operations like create, rename, delete, move or copy are prevented */
 						'data' : jsondata
 					},
 					"plugins" : [ "search", "contextmenu" ],
@@ -51,11 +52,11 @@
 									"id")[0].id;
 							var nodeType = $('#jsTree').jstree().get_selected(
 									"id")[0].type;
-							alert("folder: " + nodeType)
+							/* alert("folder: " + nodeType) */
 
 							var tree = $("#jsTree").jstree(true);
 							if ($node.type === 'file') {
-								alert("file: " + $node);
+								/* alert("file: " + $node); */
 								return getFileContextMenu($node, tree);
 							} else {
 
@@ -65,17 +66,22 @@
 					}
 				}).bind("select_node.jstree", function(evt, data) {
 
-			var i, j, k = [], r = [], ids = [];
+			var i, j, k = [], r = [], m=[], ids = [];
 			for (i = 0, j = data.selected.length; i < j; i++) {
+				//alert("data.selected[i]: " + data.selected[i]);
 				r.push(data.instance.get_node(data.selected[i]).text);
 				k.push(data.instance.get_node(data.selected[i]).id)
+				m.push(data.instance.get_node(data.selected[i]).parent)
 
 			}
 			//alert('Selected: ' + r.join(', '));
-			var x = document.getElementById("content");
+			var x = document.getElementById("selectedNodeText");
 			x.innerHTML = r.join(', ');
 			var y = document.getElementById("selectedNodeId");
 			y.innerHTML = k.join(', ');
+			//alert('Selected: ' + m.join(', '));
+			var z = document.getElementById("selectedNodeType");
+			z.innerHTML = m.join(', ');
 		});
 	}
 
@@ -126,6 +132,7 @@
 				"separator_after" : false,
 				"label" : "Rename",
 				"action" : function(obj) {
+					/* alert("In rename"); */
 					tree.edit($node);
 				}
 			},
@@ -203,11 +210,14 @@
 			<div class="col-md-8">
 				<!--panel-->
 				<div class="panel panel-default">
-					<div class="panel-heading" id="selectedNodeId">Selected Node
+					<div class="panel-heading" id="selectedNodeId">Selected Node Text
 						-</div>
 					<div class="panel-body">
-						<div class="" id="content">Content</div>
+						<div class="" id="selectedNodeText">Text</div>
 					</div>
+					<div class="panel-heading" id="selectedNodeType">Selected Node Type
+						-</div>
+					<div class="panel-body">
 				</div>
 			</div>
 		</div>
