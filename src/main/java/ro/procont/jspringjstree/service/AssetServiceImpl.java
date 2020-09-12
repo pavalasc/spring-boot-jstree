@@ -2,6 +2,8 @@ package ro.procont.jspringjstree.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,18 @@ public class AssetServiceImpl implements AssetService{
 	public List<Asset> findAll() {
 		// TODO Auto-generated method stub
 		return assetRepository.findAll();
+	}
+
+	@Override
+	public Asset findById(int id) {
+		// TODO Auto-generated method stub
+		return assetRepository.findById(id).get();
+	}
+
+	@Override
+	public void save(@Valid Asset asset) {
+		assetRepository.save(asset);
+		
 	}
 
 }

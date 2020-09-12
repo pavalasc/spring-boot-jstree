@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8" />
 <title>Simple jsTree</title>
@@ -80,23 +82,23 @@
 					}
 				}).bind("select_node.jstree", function(evt, data) {
 
-			var i, j, k = [], r = [], m=[], ids = [];
-			for (i = 0, j = data.selected.length; i < j; i++) {
-				//alert("data.selected[i]: " + data.selected[i]);
-				r.push(data.instance.get_node(data.selected[i]).text);
-				k.push(data.instance.get_node(data.selected[i]).id)
-				m.push(data.instance.get_node(data.selected[i]).parent)
-
-			}
-			//alert('Selected: ' + r.join(', '));
-			var x = document.getElementById("selectedNodeText");
-			x.innerHTML = r.join(', ');
-			var y = document.getElementById("selectedNodeId");
-			y.innerHTML = k.join(', ');
-			//alert('Selected: ' + m.join(', '));
-			var z = document.getElementById("selectedNodeType");
-			z.innerHTML = m.join(', ');
-		});
+														var i, j, k = [], r = [], m=[], ids = [];
+														for (i = 0, j = data.selected.length; i < j; i++) {
+															//alert("data.selected[i]: " + data.selected[i]);
+															r.push(data.instance.get_node(data.selected[i]).text);
+															k.push(data.instance.get_node(data.selected[i]).id)
+															m.push(data.instance.get_node(data.selected[i]).parent)
+											
+														}
+					//alert('Selected: ' + r.join(', '));
+					var x = document.getElementById("selectedNodeText");
+					x.innerHTML = r.join(', ');
+					var y = document.getElementById("selectedNodeId");
+					y.innerHTML = k.join(', ');
+					//alert('Selected: ' + m.join(', '));
+					var z = document.getElementById("selectedNodeType");
+					z.innerHTML = m.join(', ');
+				});
 	}
 
 	function getFolderContextMenu($node, tree) {
@@ -141,14 +143,16 @@
 					}
 				}
 			},
-			"Rename" : {
+			"Edit" : {
 				"separator_before" : false,
 				"separator_after" : false,
-				"label" : "Rename",
-				"action" : function(obj) {
-					//alert("In rename");
+				"label" : "Edit",
+				"action" : function(data) {
+					var inst = $.jstree.reference(data.reference),
+					obj = inst.get_node(data.reference);
+					//alert("In rename " + obj.id);
 					//var link = $(evt.target).attr("http://google.com");
-					window.open("http://localhost:8080/assets", '_blank');
+					window.open("http://localhost:8080/assets/edit/" + obj.id, '_self');
 					//tree.edit($node);
 				}
 			},
@@ -165,10 +169,10 @@
 
 	function getFileContextMenu($node, tree) {
 		return {
-			"Rename" : {
+			"Edit" : {
 				"separator_before" : false,
 				"separator_after" : false,
-				"label" : "Rename",
+				"label" : "Edit",
 				"action" : function(obj) {
 					tree.edit($node);
 				}
@@ -189,10 +193,11 @@
 			var searchString = $(this).val();
 			$('#jsTree').jstree('search', searchString);
 		});
+		$('#jsTree').slimScroll({
+			height : '300px'
+		});
 	});
-	$('#jsTree').slimScroll({
-		height : '200px'
-	});
+	
 
 	$("#jsTree").on("select_node.jstree", function(evt, data) {
 		alert(data.node.text);
@@ -226,48 +231,80 @@
 			<div class="col-md-8">
 				<!--panel-->
 				<div class="panel panel-default">
-					<div class="panel-heading" id="selectedNodeId">Selected Node Text
-						-</div>
+					<div class="panel-heading" id="selectedNodeId">Selected Node
+						Text -</div>
 					<div class="panel-body">
 						<div class="" id="selectedNodeText">Text</div>
 					</div>
-					<div class="panel-heading" id="selectedNodeType">Selected Node Type
-						-</div>
-					<div class="panel-body">
+					<div class="panel-heading" id="selectedNodeType">Selected
+						Node Type -</div>
+					<div class="panel-body"></div>
 				</div>
 			</div>
 		</div>
 	</div>
+	
+	<!-- <div th:if="not editMode">
+			<a href="/jstree">Go to JsTree dynamic page!</a>
+		</div>
+	 -->
+	<div class="container" style="padding: 10px 10px;" th:if="${editMode}">
+		
+		<a href="/jstree">Go to JsTree dynamic page!</a>
+		<br>
+		<span th:text="${editMode}">Hello</span>
+		
+		<div class="well clearfix">
+			<h1>Edit node: <span th:text="${asset.text}">Hello</span> </h1> 
+			<div class="col-md-12">
+				<!--panel-->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="input-group">
+						
+							<form name="myForm" action="#" th:action="@{/assets/update/{id}(id=${asset.id})}" th:object="${asset}" method="post">
+								<div class="row">
+									<div class="form-group col-md-3">
+										<label for="name" class="col-form-label">Parent</label> <input
+											type="text" th:field="*{parent}" class="form-control" id="parent"
+											placeholder="Parent"> <span
+											th:if="${#fields.hasErrors('parent')}" th:errors="*{parent}"
+											class="text-danger"></span>
+									</div>
+									<div class="form-group col-md-9">
+										<label for="email" class="col-form-label">Text</label> <input
+											type="text" th:field="*{text}" class="form-control" id="text"
+											placeholder="Text"> <span
+											th:if="${#fields.hasErrors('text')}" th:errors="*{text}"
+											class="text-danger"></span>
+									</div>
+									
+								</div>
+								<!-- <div class="row">
+									<div class="col-md-6 mt-5">
+										<input type="submit" class="btn btn-primary" value="Update Asset">
+										<input type="cancel" class="btn btn-primary" value="Cancel">
+									</div>
+								</div> -->
+								
+								<div class="form-actions">
+								  <button type="submit" class="btn btn-primary">Save changes</button>
+								  <button type="button" class="btn btn-primary" onclick="history.go(-1)">Cancel</button>
+								</div>
+								
+							</form>
+						
+						</div>
+					</div>
+						<a href="/jstree">Cancel edit node</a>
+				</div>
+			</div>
+		</div>
+		
+		
+	</div>
+
+	
 </body>
 </html>
-<script type="text/javascript">
-	/*   $(document).ready(function(){
-	 $('#jsTree').jstree({
-	 'core' : {
-	 'data' : jsonData
-	 },
-	 "search": {
-	 "case_insensitive": true,
-	 "show_only_matches" : true
-	 },
-	 plugins: ["search"]
-	 }).bind("select_node.jstree", function (e, data) {
-	 var href = data.node.a_attr.href;
-	 var parentId = data.node.a_attr.parent_id;
-	 if(href == '#')
-	 return '';
-	
-	 window.open(href);
-	
-	 });
-	 $('#jsTree').slimScroll({
-	 height: '200px'
-	 });
-	 $('#search').keyup(function(){
-	 $('#jsTree').jstree('search', $(this).val());
-	 }); 
-	
-	 }); */
-</script>
-</body>
-</html>
+
