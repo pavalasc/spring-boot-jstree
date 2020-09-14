@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JS Tree</title>
+	<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+	<div id="html">
+		<ul>
+		  <li>Root node 1
+			<ul>
+			  <li>Child node 1</li>
+			  <li><a href="#">Child node 2</a></li>
+			  li>Child node 1</li>
+			  <li><a href="#">Child node 2</a>
+				<ul>
+				  <li>Child node 1</li>
+				  <li><a href="#">Child node 2</a></li>
+				  li>Child node 1</li>
+				  <li><a href="#">Child node 2</a></li>
+				</ul>
+			</li>
+			</ul>
+		  </li>
+		</ul>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous"></script>
+	<script src="jstree.min.js"></script>
+	<script>
+	$('#html').jstree();
+	$('#data').jstree({
+		'core' : {
+			"themes":{
+				"icons":true
+			}
+		}
+	});
+	</script>
+</body>
+</html>

@@ -21,7 +21,7 @@
 	$(function() {
 		$.ajax({
 			async : true,
-			type : "POST",
+			type : "GET",
 			url : "http://localhost:8080/assets",
 			dataType : "json",
 			success : function(json) {
@@ -41,16 +41,50 @@
 	    window.location.href = href;
 	}); */
 	
-	$("#jsTree").on("click", ".jstree-anchor", function(evt)
+	/* $("#jsTree").jstree(true).set_icon(nodeId, "/images/blabla.png"); */
+	
+	/* $("#jsTree").on("click", ".jstree-anchor", function(evt)
 			{
 			alert("select_node.jstree");
 			var link = $(evt.target).attr("href");
 			window.open(link, '_blank');
-			});
+			}); */
 	
+		/* $('#jsTree').on('changed.jstree', function(e, data) {
 
+			      //do something
+			    }).on("open_node.jstree", function(event, data) {
+			        jQuery.each(data.instance._model.data, function(key, val) {
+			            console.log(key + ", " + val);
+			           if (key.length < 4 || key=='#') {
+			               jQuery.jstree.reference("#tree-edit").set_type(val, "selectable");
+			           }
+			        });
+			    }).on("loaded_node.jstree", function(event, data) {
+			        console.log(data);
+
+			    }).jstree({
+			        'plugins': ["search", "types"],
+			        'core': {
+			            'data': {
+			                'url': 'http://www.google.com/json',
+			                'data': function(node) {
+			                    return {'id': node.id};
+			                }
+			            }
+			        },
+			        'types': {
+			            'selectable': {
+			                'icon': 'http://elpidio.tools4software.com/images/icon-ok-small.png'
+			            },
+			            'default': {
+			                'icon': 'http://www.fabulatech.com/printer-for-remote-desktop-server-help/img/icons/warning-small.gif'
+			            }
+			        },
+			    });
+ */
 	function createJSTree(jsondata) {
-		$('#jsTree').jstree(
+		$('#jsTree').jstree(  //.jstree() function accepts a config object.
 				{
 					'core' : {
 						'check_callback': true, /* determines what happens when a user tries to modify the structure of the tree If left as false all operations like create, rename, delete, move or copy are prevented */
