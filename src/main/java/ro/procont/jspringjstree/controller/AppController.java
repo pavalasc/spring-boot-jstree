@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ro.procont.jspringjstree.model.Asset;
-import ro.procont.jspringjstree.model.Product;
+
 import ro.procont.jspringjstree.service.AssetService;
-import ro.procont.jspringjstree.service.ProductService;
 
 import java.util.ArrayList;
 import java.util.Arrays;

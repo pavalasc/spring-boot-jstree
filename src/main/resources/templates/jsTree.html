@@ -90,7 +90,16 @@
 						'check_callback': true, /* determines what happens when a user tries to modify the structure of the tree If left as false all operations like create, rename, delete, move or copy are prevented */
 						'data' : jsondata
 					},
-					"plugins" : [ "search", "contextmenu" ],
+					"plugins" : [ "search", "contextmenu", "types" ],
+					'types': {
+		                "folder": {
+		                    "icon": "jstree-icon jstree-folder"
+		                },
+		                "file": {
+		                    "icon": "jstree-icon jstree-file"
+		                }
+
+		            },
 					"search" : {
 						"case_sensitive" : false,
 						"show_only_matches" : true

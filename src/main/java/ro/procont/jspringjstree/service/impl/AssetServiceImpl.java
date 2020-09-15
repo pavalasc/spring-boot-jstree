@@ -1,4 +1,4 @@
-package ro.procont.jspringjstree.service;
+package ro.procont.jspringjstree.service.impl;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import ro.procont.jspringjstree.model.Asset;
 import ro.procont.jspringjstree.repos.AssetRepository;
+import ro.procont.jspringjstree.service.AssetService;
 
 @Service
 public class AssetServiceImpl implements AssetService{
