@@ -53,7 +53,7 @@ public class AppController {
     }
     
     
-    //return json data/called from js
+    //return json data/called from js using ajax
     @RequestMapping("/assets")
     @ResponseBody
     public List<Asset> getAssets(){
