@@ -26,18 +26,23 @@ public class AssetController {
 	
 	private Boolean newMode = false;
 	
-	@GetMapping("/addForm") //show the new node form ATENTIE este GET
-	public String showAddNewForm(@Valid Model model) {
-		System.out.println("-->add new node");
-		this.editMode = true;
-		model.addAttribute("user", new Asset());//new user to populate the form 
+	
+	@GetMapping("/addForm/{id}") //show the new node form ATENTIE este GET
+	public String showAddNewEntityForm(@PathVariable("id") int id, @Valid Model model) {
+		System.out.println("-->add new node, parent id " + id);
+		this.newMode = true;
+		Asset asset = new Asset();
+		asset.setParent(String.valueOf(id));
+		model.addAttribute("asset", asset);//new user to populate the form 
 		model.addAttribute("newMode", newMode);
 		return "jsTree";
 	}
 	
-	@PostMapping("/addNew")
-	public String saveNewEntity(@ModelAttribute("asset") @Valid Asset asset, BindingResult result, Model model) {
 	
+	
+	@PostMapping("/addNew")
+	public String onSubmitNewEntity(@ModelAttribute("asset") @Valid Asset asset, BindingResult result, Model model) {
+		System.out.println("Asset: " + asset);
 		if (result.hasErrors()) {
 			
 //			List<FieldError> err=result.getFieldErrors();
@@ -50,7 +55,7 @@ public class AssetController {
 		assetService.save(asset);
 		this.editMode = true;
 		model.addAttribute("newMode", newMode);
-		return "redirect:/jsTree/";
+		return "redirect:/jstree";
 	}
 
 	
@@ -81,6 +86,15 @@ public class AssetController {
 		this.editMode = false;
 		return "redirect:/jstree";
 	}
+	
+	@GetMapping("/delete/{id}") 
+	public String deleteAsset(@PathVariable("id") int id, Model model) {
+		Asset asset = assetService.findById(id);//.orElseThrow(() -> new IllegalArgumentException("Invalid asset Id:" + id));
+		System.out.println("Aseet to delete: " + asset);
+		assetService.delete(asset);
+		
+		return "redirect:/jstree";
+	}
 
 
 	public Boolean getEditMode() {
@@ -91,4 +105,5 @@ public class AssetController {
 	public void setEditMode(Boolean editMode) {
 		this.editMode = editMode;
 	}
+
 }

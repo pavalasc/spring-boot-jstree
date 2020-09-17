@@ -35,4 +35,10 @@ public class AssetServiceImpl implements AssetService{
 		
 	}
 
+	@Override
+	public void delete(Asset asset) {
+		assetRepository.delete(asset);
+		
+	}
+
 }

@@ -134,13 +134,13 @@
 											
 														}
 					//alert('Selected: ' + r.join(', '));
-					var x = document.getElementById("selectedNodeText");
-					x.innerHTML = r.join(', ');
-					var y = document.getElementById("selectedNodeId");
-					y.innerHTML = k.join(', ');
+					var x = document.getElementById("selectedNodeText"); //text
+					x.innerHTML = 'Selected node text: ' + r.join(', ');
+					var y = document.getElementById("selectedNodeId"); //id
+					y.innerHTML ='Selected node id: ' + k.join(', ');
 					//alert('Selected: ' + m.join(', '));
-					var z = document.getElementById("selectedNodeType");
-					z.innerHTML = m.join(', ');
+					var z = document.getElementById("selectedNodeParent");//parent
+					z.innerHTML = 'Selected node parent: ' + m.join(', ');
 				});
 	}
 
@@ -156,17 +156,12 @@
 						"seperator_before" : false,
 						"seperator_after" : false,
 						"label" : "File",
-						action : function(obj) {
-							$node = tree.create_node($node, {
-								text : 'New File',
-								icon : 'glyphicon glyphicon-file',
-								a_attr : {
-									type : 'file'
-								}
-							});
-							tree.deselect_all();
-							tree.select_node($node);
-							alert("In create File from node " + obj.id);
+						action : function(data) {
+							var inst = $.jstree.reference(data.reference),
+							obj = inst.get_node(data.reference);
+							//alert("In rename " + obj.id);
+							//var link = $(evt.target).attr("http://google.com");
+							window.open("http://localhost:8080/assets/addForm/" + obj.id, '_self');
 						}
 					},
 					"Folder" : {
@@ -205,9 +200,15 @@
 				"separator_before" : false,
 				"separator_after" : false,
 				"label" : "Remove",
-				"action" : function(obj) {
-					tree.delete_node($node);
-					alert("In delete node id" + obj.id);
+				"action" : function(data) {
+					var inst = $.jstree.reference(data.reference),
+					obj = inst.get_node(data.reference);
+					//alert("In delete node id" + obj.id);
+					var x = confirm("Are you sure you want to delete node " + obj.text);
+					  if (x)
+						  window.open("http://localhost:8080/assets/delete/" + obj.id, '_self');
+					  else
+					    return false;
 				}
 			}
 		};
@@ -277,13 +278,12 @@
 			<div class="col-md-8">
 				<!--panel-->
 				<div class="panel panel-default">
-					<div class="panel-heading" id="selectedNodeId">Selected Node
-						Text -</div>
+					
+					<div class="panel-heading" id="selectedNodeId">Selected Node Id -</div>
 					<div class="panel-body">
-						<div class="" id="selectedNodeText">Text</div>
+						<div class="" id="selectedNodeText">Selected node Text -</div>
 					</div>
-					<div class="panel-heading" id="selectedNodeType">Selected
-						Node Type -</div>
+					<div class="panel-heading" id="selectedNodeParent">Selected Node Parent -</div>
 					<div class="panel-body"></div>
 				</div>
 			</div>
@@ -299,7 +299,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<div class="input-group">						
-							<form  action="#" th:action="@{/assets/update/{id}(id=${asset.id})}" th:object="${asset}" method="post">
+							<form  action="#" th:action="@{/assets/addNew}" th:object="${asset}" method="post">
 							<form name="myForm" action="#" th:action="@{/assets/addNew}" th:object="${asset}" method="post">
 								<div class="row">
 									<div class="form-group col-md-3">

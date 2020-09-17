@@ -15,4 +15,6 @@ public interface AssetService {
 
 	void save(@Valid Asset asset);
 
+	void delete(Asset asset);
+
 }

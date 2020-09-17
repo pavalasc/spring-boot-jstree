@@ -1,6 +1,8 @@
 package ro.procont.jspringjstree.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,6 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Asset {
 		@Id
+		@GeneratedValue(strategy = GenerationType.IDENTITY)
 	    @JsonProperty("id")
 	    private Integer id;
 	   
@@ -29,18 +32,3 @@ public class Asset {
 	    
 	    
 }
-
-////Alternative format of the node (id & parent are required)
-//{
-//id          : "string" // required
-//parent      : "string" // required
-//text        : "string" // node text
-//icon        : "string" // string for custom
-//state       : {
-// opened    : boolean  // is the node open
-// disabled  : boolean  // is the node disabled
-// selected  : boolean  // is the node selected
-//},
-//li_attr     : {}  // attributes for the generated LI node
-//a_attr      : {}  // attributes for the generated A node
-//}
