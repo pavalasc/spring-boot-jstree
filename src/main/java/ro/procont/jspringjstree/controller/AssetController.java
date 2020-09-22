@@ -45,11 +45,6 @@ public class AssetController {
 		System.out.println("Asset: " + asset);
 		if (result.hasErrors()) {
 			
-//			List<FieldError> err=result.getFieldErrors();
-//			for(FieldError e:err){
-//				System.out.println("-->Error on object ---> "+e.getObjectName()+" on field ---> "+e.getField()+". Message ---> "+e.getDefaultMessage());
-//			}
-			
 			return "/jsTree";
 		}
 		assetService.save(asset);

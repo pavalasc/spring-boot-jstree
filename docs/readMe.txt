@@ -4,13 +4,13 @@ Technologies:
 	- jsTree
 	- Thymeleaf
 	- Jackson
-	- Javascrip
+	- Javascript
 	- Ajax
 	- MySQL
 	
 
 Usage:
-	
+	- right click for contextual CRUD menu.
 	
 Contribute
 The best way to contribute is by spreading the words about the repo:	
