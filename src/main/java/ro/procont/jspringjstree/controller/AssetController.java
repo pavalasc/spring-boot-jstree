@@ -27,7 +27,7 @@ public class AssetController {
 	private Boolean newMode = false;
 	
 	
-	@GetMapping("/addForm/{id}") //show the new node form ATENTIE este GET
+	@GetMapping("/addForm/{id}") //show the new node form ATENTIE este GET, id-ul este parentId
 	public String showAddNewEntityForm(@PathVariable("id") int id, @Valid Model model) {
 		System.out.println("-->add new node, parent id " + id);
 		this.newMode = true;
@@ -44,11 +44,13 @@ public class AssetController {
 	public String onSubmitNewEntity(@ModelAttribute("asset") @Valid Asset asset, BindingResult result, Model model) {
 		System.out.println("Asset: " + asset);
 		if (result.hasErrors()) {
-			
+			System.out.println("Asset entity has errors");
+			this.newMode = true;
+			model.addAttribute("newMode", newMode);
 			return "/jsTree";
 		}
 		assetService.save(asset);
-		this.editMode = true;
+		this.newMode = false;
 		model.addAttribute("newMode", newMode);
 		return "redirect:/jstree";
 	}
@@ -72,7 +74,9 @@ public class AssetController {
 		
 		if (result.hasErrors()) {
 			asset.setId(id);
-			return "redirect:assets/edit";
+			this.editMode = true;
+			model.addAttribute("editMode", editMode);
+			return "jsTree";
 		}
 		
 		assetService.save(asset);
